@@ -164,10 +164,11 @@ public class UserController {
 		}
 
 		if (!ObjectUtils.isEmpty(updateOrder)) {
-			session.setAttribute("succMsg", "Status Updated");
+			session.setAttribute("succMsg", "Cập nhật trạng thái thành công");
 		} else {
-			session.setAttribute("errorMsg", "status not updated");
+			session.setAttribute("errorMsg", "Cập nhật trạng thái thất bại");
 		}
+
 		return "redirect:/user/user-orders";
 	}
 
@@ -180,10 +181,11 @@ public class UserController {
 	public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img, HttpSession session) {
 		UserDtls updateUserProfile = userService.updateUserProfile(user, img);
 		if (ObjectUtils.isEmpty(updateUserProfile)) {
-			session.setAttribute("errorMsg", "Profile not updated");
+			session.setAttribute("errorMsg", "Cập nhật hồ sơ thất bại");
 		} else {
-			session.setAttribute("succMsg", "Profile Updated");
+			session.setAttribute("succMsg", "Cập nhật hồ sơ thành công");
 		}
+
 		return "redirect:/user/profile";
 	}
 
@@ -199,10 +201,11 @@ public class UserController {
 			loggedInUserDetails.setPassword(encodePassword);
 			UserDtls updateUser = userService.updateUser(loggedInUserDetails);
 			if (ObjectUtils.isEmpty(updateUser)) {
-				session.setAttribute("errorMsg", "Password not updated !! Error in server");
+				session.setAttribute("errorMsg", "Mật khẩu chưa được cập nhật!! Có lỗi xảy ra trên máy chủ");
 			} else {
-				session.setAttribute("succMsg", "Password Updated sucessfully");
+				session.setAttribute("succMsg", "Cập nhật mật khẩu thành công");
 			}
+
 		} else {
 			session.setAttribute("errorMsg", "Current Password incorrect");
 		}

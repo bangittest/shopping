@@ -8,11 +8,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collector;
 
+import com.ecom.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
@@ -134,7 +137,21 @@ public class HomeController {
 	@GetMapping("/product/{id}")
 	public String product(@PathVariable int id, Model m) {
 		Product productById = productService.getProductById(id);
-		m.addAttribute("product", productById);
+		ProductDTO productDTO = new ProductDTO();
+		productDTO.setId(productById.getId());
+		NumberFormat vnFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+		String formattedPrice = vnFormat.format(productById.getPrice());
+		productDTO.setPrice(formattedPrice);
+		productDTO.setDiscount(productById.getDiscount());
+		productDTO.setStock(productById.getStock());
+		String formattedPriceDiscount = vnFormat.format(productById.getDiscountPrice());
+		productDTO.setDiscountPrice(formattedPriceDiscount);
+		productDTO.setTitle(productById.getTitle());
+		productDTO.setCategory(productById.getCategory());
+		productDTO.setIsActive(productById.getIsActive());
+		productDTO.setDescription(productById.getDescription());
+		productDTO.setImage(productById.getImage());
+		m.addAttribute("product", productDTO);
 		return "view_product";
 	}
 
@@ -144,7 +161,7 @@ public class HomeController {
 
 		Boolean existsEmail = userService.existsEmail(user.getEmail());
 
-		if (existsEmail) {
+		if (Boolean.TRUE.equals(existsEmail)) {
 			session.setAttribute("errorMsg", "Email already exist");
 		} else {
 			String imageName = file.isEmpty() ? "default.jpg" : file.getOriginalFilename();
@@ -184,7 +201,8 @@ public class HomeController {
 		UserDtls userByEmail = userService.getUserByEmail(email);
 
 		if (ObjectUtils.isEmpty(userByEmail)) {
-			session.setAttribute("errorMsg", "Invalid email");
+			session.setAttribute("errorMsg", "Email không hợp lệ");
+
 		} else {
 
 			String resetToken = UUID.randomUUID().toString();
@@ -198,10 +216,11 @@ public class HomeController {
 			Boolean sendMail = commonUtil.sendMail(url, email);
 
 			if (sendMail) {
-				session.setAttribute("succMsg", "Please check your email..Password Reset link sent");
+				session.setAttribute("succMsg", "Vui lòng kiểm tra email của bạn... Liên kết đặt lại mật khẩu đã được gửi");
 			} else {
-				session.setAttribute("errorMsg", "Somethong wrong on server ! Email not send");
+				session.setAttribute("errorMsg", "Đã xảy ra lỗi trên máy chủ! Email không được gửi");
 			}
+
 		}
 
 		return "redirect:/forgot-password";
@@ -213,7 +232,8 @@ public class HomeController {
 		UserDtls userByToken = userService.getUserByToken(token);
 
 		if (userByToken == null) {
-			m.addAttribute("msg", "Your link is invalid or expired !!");
+			m.addAttribute("msg", "Liên kết của bạn không hợp lệ hoặc đã hết hạn!!");
+
 			return "message";
 		}
 		m.addAttribute("token", token);
@@ -226,7 +246,8 @@ public class HomeController {
 
 		UserDtls userByToken = userService.getUserByToken(token);
 		if (userByToken == null) {
-			m.addAttribute("errorMsg", "Your link is invalid or expired !!");
+			m.addAttribute("errorMsg", "Liên kết của bạn không hợp lệ hoặc đã hết hạn!!");
+
 			return "message";
 		} else {
 			userByToken.setPassword(passwordEncoder.encode(password));

@@ -1,67 +1,242 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard</title>
+	<!-- Bootstrap 5 CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<style>
+		.sidebar {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 100;
+			height: 100%;
+			width: 250px;
+			background-color: #343a40;
+			color: white;
+			padding-top: 20px;
+		}
+
+		.sidebar a {
+			color: white;
+			text-decoration: none;
+			padding: 15px;
+			display: block;
+			font-size: 18px;
+			transition: background-color 0.3s ease;
+		}
+
+		.sidebar a:hover {
+			background-color: #575757;
+		}
+
+		.content {
+			margin-left: 250px;
+			padding: 20px;
+		}
+
+		.header {
+			text-align: center;
+			font-size: 30px;
+			margin-bottom: 30px;
+		}
+
+		.card-body i {
+			font-size: 3rem;
+		}
+
+		.btn-sm {
+			font-size: 12px;
+		}
+
+		.button-container {
+			display: flex;
+			gap: 10px;  /* Khoảng cách giữa các nút */
+			flex-wrap: wrap;  /* Cho phép các nút xuống dòng khi không đủ không gian */
+		}
+
+		/* Đảm bảo các nút không bị mất màu */
+		.update-status, .btn-warning {
+			display: inline-block;
+			margin: 5px 0; /* Khoảng cách giữa các nút */
+			padding: 5px 10px; /* Điều chỉnh padding */
+			background-color: #ffc107; /* Màu vàng cho nút warning */
+			border-color: #ffc107;  /* Màu viền của nút */
+			color: white;  /* Màu chữ của nút */
+			font-weight: bold; /* Làm đậm chữ */
+			border-radius: 5px; /* Bo góc cho nút */
+			transition: background-color 0.3s, border-color 0.3s;
+		}
+
+		.update-status {
+			background-color: #007bff; /* Màu xanh cho nút thay đổi trạng thái */
+			border-color: #007bff;
+		}
+
+		/* Nút khi hover */
+		.update-status:hover, .btn-warning:hover {
+			background-color: #0056b3; /* Màu xanh khi hover */
+			border-color: #0056b3;
+		}
+
+		.btn-warning:hover {
+			background-color: #e0a800; /* Màu vàng đậm khi hover */
+			border-color: #e0a800;
+		}
+	</style>
 </head>
 <body>
-	<section>
-		<div class="container-fluid mt-5 p-5">
+<div class="sidebar">
+	<a href="/admin/">
+		<h3 class="text-white">Admin Dashboard</h3>
+	</a>
+	<a href="/admin/category">
+		<i class="fa-solid fa-list"></i> Quản lý danh mục
+	</a>
+	<a href="/admin/products">
+		<i class="fa-solid fa-table-list"></i> Quản lý sản phẩm
+	</a>
+	<a href="/admin/orders">
+		<i class="fa-solid fa-box-open"></i> Quản lý đơn hàng
+	</a>
+	<a href="/admin/users">
+		<i class="fa-solid fa-circle-user"></i> Quản lý khách hàng
+	</a>
+</div>
 
-			<div class="card card-sh">
-				<div class="card-header text-center">
-					<p class="fs-4" th:if="${userType==1}">Users</p>
-					<p class="fs-4" th:if="${userType==2}">Admin</p>
-					<th:block th:if="${session.succMsg}">
-						<p class="text-success fw-bold">[[${session.succMsg}]]</p>
-						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-					</th:block>
+<div class="content">
+	<div class="container-fluid mt-4 p-3">
+		<p class="text-center fs-3 mt-2">Tất cả người dùng</p>
+		<hr>
 
-					<th:block th:if="${session.errorMsg}">
-						<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-					</th:block>
-				</div>
-				<div class="card-body">
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">Sl No</th>
-								<th scope="col">Profile</th>
-								<th scope="col">Name</th>
-								<th scope="col">Email</th>
-								<th scope="col">Mobile No</th>
-								<th scope="col">Address</th>
-								<th scope="col">Status</th>
-								<th scope="col">Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="u,c:${users}">
-								<th scope="row">[[${c.count}]]</th>
-								<td><img th:src="@{'/img/profile_img/'+${u.profileImage}}"
-									width="70px" height="70px"></td>
-								<td>[[${u.name}]]</td>
-								<td>[[${u.email}]]</td>
-								<td>[[${u.mobileNumber}]]</td>
-								<td>[[${u.address+','+u.city+','+u.state+','+u.pincode}]]</td>
-								<td>[[${u.isEnable}]]</td>
-								<td><a th:href="@{'/admin/updateSts?status=true&id='+${u.id}}+'&type='+${userType}"
-									class="btn btn-sm btn-primary">Active</a> 
-										
-									<a
-									th:href="@{'/admin/updateSts?status=false&id='+${u.id}}+'&type='+${userType}"
-									class="btn btn-sm btn-danger">
-										Inactive</a></td>
-							</tr>
+		<div class=" text-center">
+			<th:block th:if="${session.succMsg}">
+				<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+				<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+			</th:block>
 
-						</tbody>
-					</table>
-				</div>
-			</div>
+			<th:block th:if="${session.errorMsg}">
+				<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+				<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+			</th:block>
 		</div>
+		<div class="card-body">
+			<table class="table table-bordered">
+				<thead class="table-light">
+				<tr>
+					<th scope="col">STT</th>
+					<th scope="col">Ảnh đại diện</th>
+					<th scope="col">Họ tên</th>
+					<th scope="col">Email</th>
+					<th scope="col">Số điện thoại</th>
+					<th scope="col">Địa chỉ</th>
+					<th scope="col">Vai trò</th>
+					<th scope="col">Trạng thái</th>
+					<th scope="col">Hành động</th>
+				</tr>
+				</thead>
 
-	</section>
+				<tbody>
+				<tr th:each="u,c:${users}">
+					<th scope="row">[[${c.count}]]</th>
+					<td><img th:src="@{'/img/profile_img/'+${u.profileImage}}" width="70px" height="70px"></td>
+					<td>[[${u.name}]]</td>
+					<td>[[${u.email}]]</td>
+					<td>[[${u.mobileNumber}]]</td>
+					<td>[[${u.address+','+u.city+','+u.state+','+u.pincode}]]</td>
+					<td>
+						<span th:text="${u.role == 'ROLE_ADMIN' ? 'Admin' : 'User'}"></span>
+					</td>
+
+					<td>[[${u.isEnable} ? 'Hoạt động' : 'Không hoạt động']]</td>
+					<td>
+						<!-- Nút đổi trạng thái người dùng -->
+						<span th:if="${u.role != 'ROLE_ADMIN'}">
+                            <button
+									class="update-status btn btn-sm"
+									th:data-id="${u.id}"
+                                th:data-status="${u.isEnable}">
+                                [[${u.isEnable} ? 'Inactive' : 'Active']]
+							</button>
+                        </span>
+
+						<span th:if="${ u.role == 'ROLE_USER'}">
+        					<button
+									class="btn btn-sm btn-warning"
+									th:data-id="${u.id}"
+									th:data-role="'ROLE_ADMIN'"
+									onclick="assignRole(event)">Phân quyền
+    						</button>
+						</span>
+
+					</td>
+				</tr>
+				</tbody>
+
+			</table>
+		</div>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+	// Xử lý thay đổi trạng thái người dùng
+	$(document).on('click', '.update-status', function(e) {
+		e.preventDefault();
+		var userId = $(this).data('id');
+		var currentStatus = $(this).data('status');
+		var newStatus = !currentStatus; // Đổi trạng thái
+
+		$.ajax({
+			url: '/admin/updateStatus',
+			type: 'POST',
+			data: {
+				id: userId,
+				status: newStatus
+			},
+			success: function(response) {
+				if (response.success) {
+					alert('Cập nhật trạng thái thành công!');
+					location.reload();  // Tải lại trang để cập nhật bảng
+				} else {
+					alert('Cập nhật thất bại!');
+				}
+			},
+			error: function() {
+				alert('Có lỗi xảy ra!');
+			}
+		});
+	});
+
+	// Xử lý phân quyền ROLE_USER thành ROLE_ADMIN
+	function assignRole(event) {
+		var userId = $(event.target).data('id');
+		var newRole = 'ROLE_ADMIN';
+
+		$.ajax({
+			url: '/admin/assignRole',
+			type: 'POST',
+			data: {
+				id: userId,
+				role: newRole
+			},
+			success: function(response) {
+				if (response.success) {
+					alert('Phân quyền thành công!');
+					location.reload();  // Tải lại trang để cập nhật trạng thái phân quyền
+				} else {
+					alert('Phân quyền thất bại!');
+				}
+			},
+			error: function() {
+				alert('Có lỗi xảy ra!');
+			}
+		});
+	}
+</script>
 </body>
 </html>

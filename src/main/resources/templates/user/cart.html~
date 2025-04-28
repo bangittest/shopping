@@ -25,15 +25,14 @@
 				<div class="card-body">
 					<table class="table">
 						<thead>
-						<tr>
-							<th scope="col">STT</th>
-							<th scope="col">Hình ảnh</th>
-							<th scope="col">Tên sản phẩm</th>
-							<th scope="col">Giá</th>
-							<th scope="col" class="text-center">Số lượng</th>
-							<th scope="col">Tổng giá</th>
-						</tr>
-
+							<tr>
+								<th scope="col">Sl No</th>
+								<th scope="col">Image</th>
+								<th scope="col">Product Name</th>
+								<th scope="col">Price</th>
+								<th scope="col" class="text-center">Quantity</th>
+								<th scope="col">Total Price</th>
+							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="cart,c:${carts}">

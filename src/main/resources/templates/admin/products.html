@@ -1,18 +1,82 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard</title>
+	<!-- Bootstrap 5 CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<style>
+		/* Tùy chỉnh sidebar */
+		.sidebar {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 100;
+			height: 100%;
+			width: 250px;
+			background-color: #343a40;
+			color: white;
+			padding-top: 20px;
+		}
+
+		.sidebar a {
+			color: white;
+			text-decoration: none;
+			padding: 15px;
+			display: block;
+			font-size: 18px;
+			transition: background-color 0.3s ease;
+		}
+
+		.sidebar a:hover {
+			background-color: #575757;
+		}
+
+		.content {
+			margin-left: 250px;
+			padding: 20px;
+		}
+
+		.header {
+			text-align: center;
+			font-size: 30px;
+			margin-bottom: 30px;
+		}
+
+		.card-body i {
+			font-size: 3rem;
+		}
+	</style>
 </head>
 <body>
-	<section>
+<div class="sidebar">
+	<a href="/admin/">
+		<h3 class=" text-white">Admin Dashboard</h3>
+	</a>
+	<a href="/admin/category">
+		<i class="fa-solid fa-list"></i> Quản lý danh mục
+	</a>
+	<a href="/admin/products">
+		<i class="fa-solid fa-table-list"></i> Quản lý sản phẩm
+	</a>
+	<a href="/admin/orders">
+		<i class="fa-solid fa-box-open"></i> Quản lý đơn hàng
+	</a>
+	<a href="/admin/users">
+		<i class="fa-solid fa-circle-user"></i> Quản lý khách hàng
+	</a>
+</div>
+
+<div class="content">
 		<div class="container-fluid mt-4 p-3">
 			<div class="row">
-				<p class="text-center fs-3 mt-2">All Products</p>
+				<p class="text-center fs-3 mt-2">Tất cả các sản phẩm</p>
 				<hr>
-				<a href="/admin/" class="text-decoration-none"><i
-					class="fa-solid fa-arrow-left"></i> Back</a>
+<!--				<a href="/admin/" class="text-decoration-none"><i-->
+<!--					class="fa-solid fa-arrow-left"></i> Back</a>-->
 				<th:block th:if="${session.succMsg}">
 					<p class="text-success fw-bold">[[${session.succMsg}]]</p>
 					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -45,19 +109,25 @@
 
 				<!-- <div class="card card-sh">-->
 				<div class="p-3">
+					<a href="/admin/loadAddProduct">
+						<button class="btn btn-primary btn-sm">
+							Thêm mới sản phẩm
+						</button>
+					</a>
 					<table class="table table-bordered">
 						<thead class="table-light ">
 							<tr>
-								<th scope="col">Sl No</th>
-								<th scope="col">Image</th>
-								<th scope="col">Title</th>
-								<th scope="col">Category</th>
-								<th scope="col">Price</th>
-								<th scope="col">Discount</th>
-								<th scope="col">Discount Price</th>
-								<th scope="col">Status</th>
-								<th scope="col">Stock</th>
-								<th scope="col">Action</th>
+								<th scope="col">STT</th>
+								<th scope="col">Hình ảnh</th>
+								<th scope="col">Tiêu đề</th>
+								<th scope="col">Danh mục</th>
+								<th scope="col">Giá</th>
+								<th scope="col">Giảm giá</th>
+								<th scope="col">Giá sau giảm</th>
+								<th scope="col">Trạng thái</th>
+								<th scope="col">Số lượng tồn kho</th>
+								<th scope="col">Hành động</th>
+
 							</tr>
 						</thead>
 						<tbody>
@@ -70,14 +140,17 @@
 								<td>[[${p.price}]]</td>
 								<td>[[${p.discount}]]</td>
 								<td>[[${p.discountPrice}]]</td>
-								<td>[[${p.isActive}]]</td>
+								<td>
+									<span th:text="${p.isActive ? 'Đang hoạt động' : 'Không hoạt động'}"></span>
+								</td>
+
 								<td>[[${p.stock}]]</td>
 								<td><a th:href="@{'/admin/editProduct/'+${p.id}}"
 									class="btn btn-sm btn-primary"><i
-										class="fa-solid fa-pen-to-square"></i>Edit</a> <a
+										class="fa-solid fa-pen-to-square"></i></a> <a
 									th:href="@{'/admin/deleteProduct/'+${p.id}}"
 									class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i>
-										Delete</a></td>
+										</a></td>
 							</tr>
 
 						</tbody>
@@ -116,6 +189,6 @@
 			</div>
 		</div>
 		<!-- 	</div> -->
-	</section>
+	</div>
 </body>
 </html>

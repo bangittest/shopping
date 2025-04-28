@@ -49,8 +49,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDtls> getUsers(String role) {
-		return userRepository.findByRole(role);
+	public List<UserDtls> getUsers() {
+		return userRepository.findAll();
 	}
 
 	@Override
@@ -65,6 +65,17 @@ public class UserServiceImpl implements UserService {
 			return true;
 		}
 
+		return false;
+	}
+
+	@Override
+	public boolean assignRole(Integer userId, String role) {
+		Optional<UserDtls> user = userRepository.findById(userId);
+		if (user.isPresent()) {
+			user.get().setRole(role);
+			userRepository.save(user.get());
+			return true;
+		}
 		return false;
 	}
 

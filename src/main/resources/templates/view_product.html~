@@ -3,7 +3,7 @@
 	th:replace="~{base::layout(~{::section})}">
 <head>
 	<meta charset="UTF-8">
-	<title>Sumire Store</title>
+<title>Insert title here</title>
 </head>
 <body>
 	<section>

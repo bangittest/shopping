@@ -7,7 +7,7 @@ $(function(){
 	$userRegister.validate({
 		
 		rules:{
-
+			
 			email: {
 				required: true,
 				space: true,
@@ -32,7 +32,17 @@ $(function(){
 				equalTo: '#pass'
 
 			},
+			address: {
+				required: true,
+				all: true
 
+			},
+
+			city: {
+				required: true,
+				space: true
+
+			},
 			state: {
 				required: true,
 
@@ -49,7 +59,10 @@ $(function(){
 			
 		},
 		messages:{
-
+			name:{
+				required:'name required',
+				lettersonly:'invalid name'
+			},
 			email: {
 				required: 'email name must be required',
 				space: 'space not allowed',
@@ -72,6 +85,17 @@ $(function(){
 				required: 'confirm password must be required',
 				space: 'space not allowed',
 				equalTo: 'password mismatch'
+
+			},
+			address: {
+				required: 'address must be required',
+				all: 'invalid'
+
+			},
+
+			city: {
+				required: 'city must be required',
+				space: 'space not allowed'
 
 			},
 			state: {

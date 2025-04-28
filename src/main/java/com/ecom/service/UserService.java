@@ -12,9 +12,11 @@ public interface UserService {
 
 	public UserDtls getUserByEmail(String email);
 
-	public List<UserDtls> getUsers(String role);
+	public List<UserDtls> getUsers();
 
 	public Boolean updateAccountStatus(Integer id, Boolean status);
+
+	boolean assignRole(Integer id ,String role);
 
 	public void increaseFailedAttempt(UserDtls user);
 

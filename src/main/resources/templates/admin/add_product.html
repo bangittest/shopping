@@ -1,18 +1,90 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--	th:replace="~{base::layout(~{::section})}">-->
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin Dashboard</title>
+	<!-- Bootstrap 5 CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!--	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">-->
+<!--	<style>-->
+<!--		/* Tùy chỉnh sidebar */-->
+<!--		.sidebar {-->
+<!--			position: fixed;-->
+<!--			top: 0;-->
+<!--			bottom: 0;-->
+<!--			left: 0;-->
+<!--			z-index: 100;-->
+<!--			height: 100%;-->
+<!--			width: 250px;-->
+<!--			background-color: #343a40;-->
+<!--			color: white;-->
+<!--			padding-top: 20px;-->
+<!--		}-->
+
+<!--		.sidebar a {-->
+<!--			color: white;-->
+<!--			text-decoration: none;-->
+<!--			padding: 15px;-->
+<!--			display: block;-->
+<!--			font-size: 18px;-->
+<!--			transition: background-color 0.3s ease;-->
+<!--		}-->
+
+<!--		.sidebar a:hover {-->
+<!--			background-color: #575757;-->
+<!--		}-->
+
+<!--		.content {-->
+<!--			margin-left: 250px;-->
+<!--			padding: 20px;-->
+<!--		}-->
+
+<!--		.header {-->
+<!--			text-align: center;-->
+<!--			font-size: 30px;-->
+<!--			margin-bottom: 30px;-->
+<!--		}-->
+
+<!--		.card-body i {-->
+<!--			font-size: 3rem;-->
+<!--		}-->
+<!--	</style>-->
 </head>
 <body>
+<!--<div class="sidebar">-->
+<!--	<h3 class="text-center text-white">Admin Dashboard</h3>-->
+<!--	<a href="/admin/category">-->
+<!--		<i class="fa-solid fa-list"></i> Quản lý danh mục-->
+<!--	</a>-->
+<!--	<a href="/admin/products">-->
+<!--		<i class="fa-solid fa-square-plus"></i>Quản lý sản phẩm-->
+<!--	</a>-->
+
+<!--	&lt;!&ndash;	<a href="/admin/products">&ndash;&gt;-->
+<!--	&lt;!&ndash;		<i class="fa-solid fa-table-list"></i> View Product&ndash;&gt;-->
+<!--	&lt;!&ndash;	</a>&ndash;&gt;-->
+<!--	<a href="/admin/orders">-->
+<!--		<i class="fa-solid fa-box-open"></i> Quản lý đơn hàng-->
+<!--	</a>-->
+<!--	<a href="/admin/users?type=1">-->
+<!--		<i class="fa-solid fa-circle-user"></i> Quản lý khách hàng-->
+<!--	</a>-->
+<!--	&lt;!&ndash;	<a href="/admin/add-admin">&ndash;&gt;-->
+<!--	&lt;!&ndash;		<i class="fa-solid fa-user-plus"></i> Add Admin&ndash;&gt;-->
+<!--	&lt;!&ndash;	</a>&ndash;&gt;-->
+<!--	<a href="/admin/users?type=2">-->
+<!--		<i class="fa-solid fa-circle-user"></i> Danh mục ADMIN-->
+<!--	</a>-->
+<!--</div>-->
 	<section>
 		<div class="container p-5 mt-3">
 			<div class="row">
 				<div class="col-md-6 offset-md-3">
 					<div class="card card-sh">
 						<div class="card-header text-center ">
-							<p class="fs-4">Add Product</p>
+							<p class="fs-4">Thêm mới sản phẩm</p>
 
 							<th:block th:if="${session.succMsg}">
 								<p class="text-success fw-bold">[[${session.succMsg}]]</p>
@@ -29,18 +101,18 @@
 							<form action="/admin/saveProduct" method="post"
 								enctype="multipart/form-data">
 								<div class="mb-3">
-									<label>Enter Title</label> <input type="text" name="title"
+									<label>Nhập tên sản phẩm</label> <input type="text" name="title"
 										class="form-control">
 								</div>
 
 								<div class="mb-3">
-									<label>Enter Description</label>
+									<label>Nhập mô tả</label>
 									<textarea rows="3" cols="" class="form-control"
 										name="description"></textarea>
 								</div>
 
 								<div class="mb-3">
-									<label>Category</label> <select class="form-control"
+									<label>Chọn danh mục</label> <select class="form-control"
 										name="category">
 										<option>--select--</option>
 										<option th:each="c:${categories}">[[${c.name}]]</option>
@@ -48,30 +120,30 @@
 								</div>
 
 								<div class="mb-3">
-									<label>Enter Price</label> <input type="number" name="price"
+									<label>Nhập giá</label> <input type="number" name="price"
 										class="form-control">
 								</div>
 								<div class="mb-3">
-									<label>Status</label>
+									<label>Trạng thái</label>
 
 									<div class="form-check">
 										<input class="form-check-input" type="radio" checked
 											value="true" name="isActive" id="flexRadioDefault1">
 										<label class="form-check-label" for="flexRadioDefault1">
-											Active </label>
+											Hoạt động </label>
 									</div>
 									<div class="form-check">
 										<input class="form-check-input" type="radio" name="isActive"
 											value="false" id="flexRadioDefault2"> <label
 											class="form-check-label" for="flexRadioDefault2">
-											Inactive </label>
+											Không hoạt động </label>
 									</div>
 
 								</div>
 								<div class="row">
 
 									<div class="mb-3 col">
-										<label>Enter Stock</label> <input type="text" name="stock"
+										<label>Nhập số lượng</label> <input type="text" name="stock"
 											class="form-control">
 									</div>
 
@@ -80,7 +152,14 @@
 											class="form-control">
 									</div>
 								</div>
-								<button class="btn btn-primary col-md-12">Submit</button>
+								<div class="d-flex justify-content-between">
+									<a href="/admin/products" class="w-48">
+										<button type="button" class="btn btn-secondary w-100">Hủy</button>
+									</a>
+
+									<button type="submit" class="btn btn-primary w-48">Thêm mới</button>
+								</div>
+
 							</form>
 						</div>
 					</div>
@@ -88,5 +167,73 @@
 			</div>
 		</div>
 	</section>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+<script>
+	document.querySelector("form").addEventListener("submit", function(event) {
+		// Ngừng hành động mặc định của form
+		event.preventDefault();
+
+		// Lấy các giá trị từ các trường trong form
+		var title = document.querySelector("input[name='title']").value;
+		var description = document.querySelector("textarea[name='description']").value;
+		var category = document.querySelector("select[name='category']").value;
+		var price = document.querySelector("input[name='price']").value;
+		var stock = document.querySelector("input[name='stock']").value;
+		var file = document.querySelector("input[name='file']").files[0]; // Để kiểm tra tệp đã được chọn hay chưa
+
+		// Kiểm tra các trường hợp không hợp lệ
+		if (!title) {
+			alert("Tên sản phẩm không được để trống.");
+			return;
+		}
+		if (!description) {
+			alert("Mô tả sản phẩm không được để trống.");
+			return;
+		}
+		if (category === "--select--") {
+			alert("Vui lòng chọn danh mục.");
+			return;
+		}
+		if (!price || isNaN(price) || price <= 0) {
+			alert("Giá sản phẩm phải là số và lớn hơn 0.");
+			return;
+		}
+		if (!stock || isNaN(stock) || stock <= 0) {
+			alert("Số lượng sản phẩm phải là số và lớn hơn 0.");
+			return;
+		}
+		if (!file) {
+			alert("Vui lòng chọn hình ảnh sản phẩm.");
+			return;
+		}
+
+		// Nếu tất cả các trường đều hợp lệ, tiến hành gửi form
+		var form = this; // Lấy form
+		var formData = new FormData(form); // Lấy dữ liệu từ form
+
+		// Gửi form với dữ liệu qua fetch
+		fetch(form.action, {
+			method: 'POST',
+			body: formData // Dữ liệu form
+		})
+				.then(response => response.json())
+				.then(data => {
+					// Nếu gửi thành công, điều hướng đến trang quản lý sản phẩm
+					if (data.success) {
+						alert('Sản phẩm đã được thêm thành công!');
+						window.location.href = "/admin/products";  // Chuyển hướng tới trang quản lý sản phẩm
+					} else {
+						alert('Có lỗi xảy ra khi thêm sản phẩm!');
+					}
+				})
+				.catch(error => {
+					console.error('Có lỗi xảy ra:', error);
+					alert('Có lỗi xảy ra khi gửi form!');
+				});
+	});
+</script>
