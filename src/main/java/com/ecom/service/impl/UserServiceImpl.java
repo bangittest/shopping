@@ -1,6 +1,7 @@
 package com.ecom.service.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Value("${path.img.profile}")
+	private String pathImgProfile;
 
 	@Override
 	public UserDtls saveUser(UserDtls user) {
@@ -137,39 +142,48 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDtls updateUserProfile(UserDtls user, MultipartFile img) {
 
-		UserDtls dbUser = userRepository.findById(user.getId()).get();
+		UserDtls dbUser = userRepository.findById(user.getId()).orElse(null);
+
+		if (dbUser == null) return null;
+
+		if (!img.isEmpty()) {
+			// Đặt tên ảnh theo userId để tránh trùng
+			String fileName = img.getOriginalFilename();
+			dbUser.setProfileImage(fileName);
+		}
+
+		dbUser.setName(user.getName());
+		dbUser.setMobileNumber(user.getMobileNumber());
+		dbUser.setAddress(user.getAddress());
+		dbUser.setCity(user.getCity());
+		dbUser.setState(user.getState());
+		dbUser.setPincode(user.getPincode());
+		dbUser = userRepository.save(dbUser);
+
+		if (dbUser == null) return null;
 
 		if (!img.isEmpty()) {
 			dbUser.setProfileImage(img.getOriginalFilename());
-		}
 
-		if (!ObjectUtils.isEmpty(dbUser)) {
+			try {
+				// Tạo thư mục nếu chưa tồn tại
+				File uploadDir = new File(pathImgProfile);
+				if (!uploadDir.exists()) {
+					uploadDir.mkdirs();
+				}
 
-			dbUser.setName(user.getName());
-			dbUser.setMobileNumber(user.getMobileNumber());
-			dbUser.setAddress(user.getAddress());
-			dbUser.setCity(user.getCity());
-			dbUser.setState(user.getState());
-			dbUser.setPincode(user.getPincode());
-			dbUser = userRepository.save(dbUser);
-		}
-
-		try {
-			if (!img.isEmpty()) {
-				File saveFile = new ClassPathResource("static/img").getFile();
-
-				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "profile_img" + File.separator
-						+ img.getOriginalFilename());
-
-//			System.out.println(path);
+				// Lưu ảnh vào thư mục ngoài resources
+				Path path = Paths.get(uploadDir.getAbsolutePath() + File.separator + img.getOriginalFilename());
 				Files.copy(img.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		return dbUser;
 	}
+
 
 	@Override
 	public UserDtls saveAdmin(UserDtls user) {

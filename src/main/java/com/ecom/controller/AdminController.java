@@ -484,6 +484,7 @@ public class AdminController {
         return "/admin/profile";
     }
 
+
     @PostMapping("/update-profile")
     public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img, HttpSession session) {
         UserDtls updateUserProfile = userService.updateUserProfile(user, img);

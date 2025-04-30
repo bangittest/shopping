@@ -77,6 +77,11 @@ public class CartServiceImpl implements CartService {
 	}
 
 	@Override
+	public void removeCountCart(Integer userId) {
+		cartRepository.deleteByUserId(userId);
+	}
+
+	@Override
 	public void updateQuantity(String sy, Integer cid) {
 
 		Cart cart = cartRepository.findById(cid).get();

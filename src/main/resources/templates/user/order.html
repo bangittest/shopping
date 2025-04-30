@@ -72,7 +72,7 @@
 										<tr>
 											<td>Tổng giá</td>
 											<td>:</td>
-											<td> [[${orderPrice}]]đ</td>
+											<td th:text="${#numbers.formatDecimal(orderPrice, 0, 'COMMA', 0, 'POINT') + ' đ'}"></td>
 										</tr>
 										<tr>
 											<td>Phí giao hàng</td>
@@ -89,7 +89,7 @@
 										<tr class="border-top">
 											<td>Tổng giá</td>
 											<td>:</td>
-											<td> [[${totalOrderPrice}]]đ</td>
+											<td th:text="${#numbers.formatDecimal(totalOrderPrice, 0, 'COMMA', 0, 'POINT') + ' đ'}"> </td>
 										</tr>
 									</tbody>
 								</table>

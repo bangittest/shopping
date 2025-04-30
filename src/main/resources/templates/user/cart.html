@@ -1,73 +1,159 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+	  th:replace="~{base::layout(~{::section})}">
 <head>
 	<meta charset="UTF-8">
 	<title>Sumire Store</title>
+	<style>
+		.quantity-btn {
+			border: 1px solid #ccc;
+			background-color: white;
+			color: #007bff;
+			padding: 2px 8px;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+			transition: background-color 0.2s ease;
+		}
+
+		.quantity-btn:hover {
+			background-color: #007bff;
+			color: white;
+		}
+
+		.btn-danger.btn-sm {
+			padding: 2px 8px;
+			font-size: 14px;
+		}
+	</style>
 </head>
 <body>
-	<section>
-		<div class="container-fluid mt-5 p-5">
+<section>
+	<div class="container-fluid mt-5 p-5">
+		<div class="card card-sh">
+			<div class="card-header text-center">
+				<p class="fs-4">Trang giỏ hàng</p>
 
-			<div class="card card-sh">
-				<div class="card-header text-center">
-					<p class="fs-4">Trang giỏ hàng</p>
-					<th:block th:if="${session.succMsg}">
-						<p class="text-success fw-bold">[[${session.succMsg}]]</p>
-						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-					</th:block>
+				<th:block th:if="${session.succMsg}">
+					<p class="text-success fw-bold">[[${session.succMsg}]]</p>
+					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+				</th:block>
 
-					<th:block th:if="${session.errorMsg}">
-						<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
-						<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
-					</th:block>
-				</div>
-				<div class="card-body">
-					<table class="table">
-						<thead>
-						<tr>
-							<th scope="col">STT</th>
-							<th scope="col">Hình ảnh</th>
-							<th scope="col">Tên sản phẩm</th>
-							<th scope="col">Giá</th>
-							<th scope="col" class="text-center">Số lượng</th>
-							<th scope="col">Tổng giá</th>
-						</tr>
+				<th:block th:if="${session.errorMsg}">
+					<p class="text-danger fw-bold">[[${session.errorMsg}]]</p>
+					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
+				</th:block>
+			</div>
+			<div class="card-body">
+				<table class="table">
+					<thead>
+					<tr>
+						<th scope="col">STT</th>
+						<th scope="col">Hình ảnh</th>
+						<th scope="col">Tên sản phẩm</th>
+						<th scope="col">Giá</th>
+						<th scope="col" class="text-center">Số lượng</th>
+						<th scope="col">Tổng giá</th>
+						<th scope="col">Hành động</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr th:each="cart, c : ${carts}">
+						<th scope="row">[[${c.count}]]</th>
+						<td>
+							<img th:src="@{'/img/product_img/' + ${cart.product.image}}"
+								 width="70px" height="70px">
+						</td>
+						<td>[[${cart.product.title}]]</td>
+						<td th:text="${#numbers.formatDecimal(cart.product.discountPrice, 0, 'COMMA', 0, 'POINT') + ' đ'}"></td>
+						<td class="text-center">
+							<a th:href="@{'/user/cartQuantityUpdate?sy=de&cid=' + ${cart.id}}">
+								<button class="quantity-btn1">-</button>
+							</a>
+							<span class="quantity-value1">[[${cart.quantity}]]</span>
+							<a th:href="@{'/user/cartQuantityUpdate?sy=in&cid=' + ${cart.id}}">
+								<button class="quantity-btn1">+</button>
+							</a>
+						</td>
+						<td th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT') + ' đ'}"></td>
+						<td>
 
-						</thead>
-						<tbody>
-							<tr th:each="cart,c:${carts}">
-								<th scope="row">[[${c.count}]]</th>
-								<td><img
-									th:src="@{'/img/product_img/'+${cart.product.image}}"
-									width="70px" height="70px"></td>
-								<td>[[${cart.product.title}]]</td>
-								<td>[[${cart.product.discountPrice}]]đ</td>
-								<td class="text-center"><a
-									th:href="@{'/user/cartQuantityUpdate?sy=de&cid='+${cart.id}}">
-										<i class="fa-solid fa-minus"></i>
-								</a> [ [[${cart.quantity}]] ] <a
-									th:href="@{'/user/cartQuantityUpdate?sy=in&cid='+${cart.id}}">
-										<i class="fa-solid fa-plus"></i>
-								</a></td>
-								<td>[[${cart.totalPrice}]]đ</td>
-							</tr>
-							<tr>
-								<td colspan="4"></td>
-								<td class="fw-bold">Total Price</td>
-								<td class="fw-bold"> [[${totalOrderPrice}]]đ</td>
-							</tr>
 
-						</tbody>
-					</table>
-					<div class="d-flex justify-content-between">
-						<a href="/products" class="btn btn-primary"> Tiếp tục mua hàng</a>
-						<a href="/user/orders" class="btn btn-warning"> Tiến hành thanh toán</a>
-					</div>
+							<button class="btn btn-danger btn-sm"
+									th:attr="data-id=${cart.id}"
+									onclick="console.log('click OK'); deleteCartItem(this)">Xóa</button>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4"></td>
+						<td class="fw-bold">Tổng tiền</td>
+						<td class="fw-bold"
+							th:text="${#numbers.formatDecimal(totalOrderPrice != null ? totalOrderPrice : 0, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+						</td>
+
+						<td></td>
+					</tr>
+					</tbody>
+				</table>
+				<div class="d-flex justify-content-between">
+					<a href="/products" class="btn btn-primary">Tiếp tục mua hàng</a>
+					<a href="/user/orders"
+					   id="checkoutBtn"
+					   class="btn btn-warning">Tiến hành thanh toán</a>
 				</div>
 			</div>
 		</div>
+	</div>
+</section>
 
-	</section>
+
+
+
 </body>
 </html>
+
+<!-- Đặt script sau toàn bộ HTML -->
+<script>
+	window.deleteCartItem = function (button) {
+		const cartId = button.getAttribute('data-id');
+
+		if (!confirm("Bạn có chắc muốn xóa sản phẩm này?")) return;
+
+		fetch(`/user/deleteCartItem/${cartId}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+				.then(response => {
+					if (response.ok) {
+						alert("Xóa sản phẩm thành công!");
+						const row = button.closest('tr');
+						row.remove();
+						location.reload();
+					} else {
+						alert("Xóa thất bại. Vui lòng thử lại.");
+					}
+				})
+				.catch(error => {
+					console.error("Lỗi khi gọi API xóa:", error);
+					alert("Có lỗi xảy ra!");
+				});
+	};
+</script>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const cartItems = [[${countCart}]]; // Thymeleaf sẽ thay thế giá trị này
+
+		if (cartItems === 0) {
+			const btn = document.getElementById("checkoutBtn");
+			btn.addEventListener("click", function (e) {
+				e.preventDefault();
+				alert("Bạn chưa có sản phẩm nào trong giỏ hàng.");
+			});
+			btn.classList.add("disabled");
+		}
+	});
+</script>
+

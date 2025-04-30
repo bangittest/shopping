@@ -9,11 +9,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.text.NumberFormat;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.ecom.dto.ProductDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,10 +82,21 @@ public class HomeController {
 
 		List<Category> allActiveCategory = categoryService.getAllActiveCategory().stream()
 				.sorted((c1, c2) -> c2.getId().compareTo(c1.getId())).limit(6).toList();
-		List<Product> allActiveProducts = productService.getAllActiveProducts("").stream()
-				.sorted((p1, p2) -> p2.getId().compareTo(p1.getId())).limit(8).toList();
+
+		List<Product> allActiveProducts = productService.getAllActiveProducts("");
+		Collections.shuffle(allActiveProducts);
+		List<Product> randomProducts = allActiveProducts.stream()
+				.limit(4)
+				.toList();
+		Collections.shuffle(allActiveProducts);
+		List<Product> randomProducts1 = allActiveProducts.stream()
+				.limit(4)
+				.toList();
+
+		// Lấy 4 sản phẩm ngẫu nhiên
 		m.addAttribute("category", allActiveCategory);
-		m.addAttribute("products", allActiveProducts);
+		m.addAttribute("products", randomProducts);
+		m.addAttribute("products1", randomProducts1);
 		return "index";
 	}
 
@@ -137,21 +146,21 @@ public class HomeController {
 	@GetMapping("/product/{id}")
 	public String product(@PathVariable int id, Model m) {
 		Product productById = productService.getProductById(id);
-		ProductDTO productDTO = new ProductDTO();
-		productDTO.setId(productById.getId());
-		NumberFormat vnFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
-		String formattedPrice = vnFormat.format(productById.getPrice());
-		productDTO.setPrice(formattedPrice);
-		productDTO.setDiscount(productById.getDiscount());
-		productDTO.setStock(productById.getStock());
-		String formattedPriceDiscount = vnFormat.format(productById.getDiscountPrice());
-		productDTO.setDiscountPrice(formattedPriceDiscount);
-		productDTO.setTitle(productById.getTitle());
-		productDTO.setCategory(productById.getCategory());
-		productDTO.setIsActive(productById.getIsActive());
-		productDTO.setDescription(productById.getDescription());
-		productDTO.setImage(productById.getImage());
-		m.addAttribute("product", productDTO);
+//		ProductDTO productDTO = new ProductDTO();
+//		productDTO.setId(productById.getId());
+//		NumberFormat vnFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+//		String formattedPrice = vnFormat.format(productById.getPrice());
+//		productDTO.setPrice(formattedPrice);
+//		productDTO.setDiscount(productById.getDiscount());
+//		productDTO.setStock(productById.getStock());
+//		String formattedPriceDiscount = vnFormat.format(productById.getDiscountPrice());
+//		productDTO.setDiscountPrice(formattedPriceDiscount);
+//		productDTO.setTitle(productById.getTitle());
+//		productDTO.setCategory(productById.getCategory());
+//		productDTO.setIsActive(productById.getIsActive());
+//		productDTO.setDescription(productById.getDescription());
+//		productDTO.setImage(productById.getImage());
+		m.addAttribute("product", productById);
 		return "view_product";
 	}
 

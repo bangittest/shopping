@@ -8,7 +8,7 @@
 <body>
 	<section>
 
-		<div class="container-fluid bg-primary p-4 mt-5 ">
+		<div class="container-fluid bg-gray1 p-4 ">
 			<div class="row">
 				<div class="col-md-8 offset-md-2">
 					<form action="/products" method="get">
@@ -48,26 +48,22 @@
 				<div class="col-md-10">
 					<div class="card">
 						<div class="card-body">
-							<p class="fs-3 text-center">Sản phẩm</p>
-							<div class="row">
+							<p class="fs-3 text-center">Tất cả sản phẩm</p>
+							<div class="row seller">
 
 								<th:block th:if="${productsSize >0}">
-									<div class="col-md-3 mt-2" th:each="p:${products}">
-										<div class="card card-sh">
-											<div class="card-body text-center">
-												<img alt="" th:src="@{'/img/product_img/'+${p.image}}"
-													width="150px" height="150px">
-												<p class="fs-5 text-center">[[${p.title}]]</p>
-												<div class="row text-center">
-													<p class="fs-6 fw-bold ">
-														<span> [[${p.discountPrice}]]đ</span> <br> <span
-															class="text-decoration-line-through text-secondary">
-															[[${p.price}]]đ</span> <span class="fs-6 text-success">[[${p.discount}]]%
-															off </span>
-													</p>
-													<a th:href="@{'/product/'+${p.id}}"
-														class="btn btn-primary col-md-6 offset-md-3">View
-														Details</a>
+									<div class="best-seller">
+										<div class="best-p1" th:each="p : ${products}">
+											<img th:src="@{'img/product_img/'+${p.image}}" alt="img" style="width: 100%; height: 250px; object-fit: cover;">
+											<div class="best-p1-txt">
+												<a th:href="@{'/product/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a>
+												<div class="rating">
+													<i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bx-star'></i><i class='bx bx-star'></i>
+												</div>
+												<div class="price" th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+													<div class="colors">
+														<i class='bx bxs-circle red'></i><i class='bx bxs-circle blue'></i><i class='bx bxs-circle white'></i>
+													</div>
 												</div>
 											</div>
 										</div>
@@ -108,8 +104,9 @@
 										</a></li>
 									</ul>
 								</nav>
-						</div>
+
 						</th:block>
+						</div>
 					</div>
 
 				</div>

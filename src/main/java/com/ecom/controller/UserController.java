@@ -1,18 +1,19 @@
 package com.ecom.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.ecom.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ecom.model.Cart;
@@ -50,6 +51,9 @@ public class UserController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
+	private CartRepository cartRepository;
+
 
 	@GetMapping("/")
 	public String home() {
@@ -70,17 +74,42 @@ public class UserController {
 		m.addAttribute("categorys", allActiveCategory);
 	}
 
-	@GetMapping("/addCart")
-	public String addToCart(@RequestParam Integer pid, @RequestParam Integer uid, HttpSession session) {
-		Cart saveCart = cartService.saveCart(pid, uid);
+//	@GetMapping("/addCart")
+//	public String addToCart(@RequestParam Integer pid, @RequestParam Integer uid, HttpSession session) {
+//		Cart saveCart = cartService.saveCart(pid, uid);
+//
+//		if (ObjectUtils.isEmpty(saveCart)) {
+//			session.setAttribute("errorMsg", "Product add to cart failed");
+//		} else {
+//			session.setAttribute("succMsg", "Product added to cart");
+//		}
+//		return "redirect:/product/" + pid;
+//	}
 
-		if (ObjectUtils.isEmpty(saveCart)) {
-			session.setAttribute("errorMsg", "Product add to cart failed");
-		} else {
-			session.setAttribute("succMsg", "Product added to cart");
+	@PostMapping("addCart")
+	public ResponseEntity<?> addCart(@RequestParam Integer pid, @RequestParam Integer uid) {
+		try {
+			Cart saveCart = cartService.saveCart(pid, uid);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
 		}
-		return "redirect:/product/" + pid;
 	}
+
+
+	@PostMapping("deleteCartItem/{id}")
+	@ResponseBody
+	public ResponseEntity<?> deleteCartItem(@PathVariable Integer id) {
+		try {
+			cartRepository.deleteById(id);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Xóa thất bại");
+		}
+	}
+
+
+
 
 	@GetMapping("/cart")
 	public String loadCartPage(Principal p, Model m) {
@@ -126,6 +155,7 @@ public class UserController {
 		// System.out.println(request);
 		UserDtls user = getLoggedInUserDetails(p);
 		orderService.saveOrder(user.getId(), request);
+		cartService.removeCountCart(user.getId());
 
 		return "redirect:/user/success";
 	}
@@ -177,6 +207,11 @@ public class UserController {
 		return "/user/profile";
 	}
 
+	@GetMapping("/new-password")
+	public String changePass() {
+		return "/user/new_password";
+	}
+
 	@PostMapping("/update-profile")
 	public String updateProfile(@ModelAttribute UserDtls user, @RequestParam MultipartFile img, HttpSession session) {
 		UserDtls updateUserProfile = userService.updateUserProfile(user, img);
@@ -190,27 +225,50 @@ public class UserController {
 	}
 
 	@PostMapping("/change-password")
-	public String changePassword(@RequestParam String newPassword, @RequestParam String currentPassword, Principal p,
-			HttpSession session) {
-		UserDtls loggedInUserDetails = getLoggedInUserDetails(p);
+	@ResponseBody
+	public ResponseEntity<Map<String, Object>> changePassword(
+			@RequestParam String currentPassword,
+			@RequestParam String newPassword,
+			@RequestParam String confirmPassword,
+			Principal principal) {
 
-		boolean matches = passwordEncoder.matches(currentPassword, loggedInUserDetails.getPassword());
+		Map<String, Object> response = new HashMap<>();
 
-		if (matches) {
-			String encodePassword = passwordEncoder.encode(newPassword);
-			loggedInUserDetails.setPassword(encodePassword);
-			UserDtls updateUser = userService.updateUser(loggedInUserDetails);
-			if (ObjectUtils.isEmpty(updateUser)) {
-				session.setAttribute("errorMsg", "Mật khẩu chưa được cập nhật!! Có lỗi xảy ra trên máy chủ");
-			} else {
-				session.setAttribute("succMsg", "Cập nhật mật khẩu thành công");
+		try {
+			// Validate đầu vào
+			if (newPassword.length() < 6) {
+				throw new IllegalArgumentException("Mật khẩu phải có ít nhất 6 ký tự");
 			}
 
-		} else {
-			session.setAttribute("errorMsg", "Current Password incorrect");
-		}
+			if (!newPassword.equals(confirmPassword)) {
+				throw new IllegalArgumentException("Mật khẩu mới và xác nhận không khớp");
+			}
 
-		return "redirect:/user/profile";
+			// Lấy thông tin user
+			UserDtls user = userService.getUserByEmail(principal.getName());
+
+			// Kiểm tra mật khẩu hiện tại
+			if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+				throw new IllegalArgumentException("Mật khẩu hiện tại không đúng");
+			}
+
+			// Cập nhật mật khẩu mới
+			user.setPassword(passwordEncoder.encode(newPassword));
+			UserDtls updatedUser = userService.updateUser(user);
+
+			if (updatedUser != null) {
+				response.put("success", true);
+				return ResponseEntity.ok(response);
+			} else {
+				throw new RuntimeException("Cập nhật mật khẩu thất bại");
+			}
+
+		} catch (Exception e) {
+			response.put("success", false);
+			response.put("message", e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
 	}
+
 
 }

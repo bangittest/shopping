@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-	th:replace="~{base::layout(~{::section})}">
+	  th:replace="~{base::layout(~{::section})}">
 <head>
 	<meta charset="UTF-8">
-<title>Insert title here</title>
+	<title>Sumire Store</title>
 </head>
 <body>
-	<section>
+<section>
 		<!-- Start Slider  -->
 
-		<div id="carouselExample" class="carousel slide">
-			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img src="img/ecom1.png" class="d-block w-100" alt="..."
-						height="350px">
-				</div>
-				<div class="carousel-item">
-					<img src="img/ecom3.jpg" class="d-block w-100" alt="..."
-						height="350px">
-				</div>
-				<div class="carousel-item">
-					<img src="img/ecom2.jpg" class="d-block w-100" alt="..."
-						height="350px">
-				</div>
-			</div>
-			<button class="carousel-control-prev" type="button"
-				data-bs-target="#carouselExample" data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Previous</span>
-			</button>
-			<button class="carousel-control-next" type="button"
-				data-bs-target="#carouselExample" data-bs-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Next</span>
-			</button>
-		</div>
+<!--		<div id="carouselExample" class="carousel slide">-->
+<!--			<div class="carousel-inner">-->
+<!--				<div class="carousel-item active">-->
+<!--					<img src="img/ecom1.png" class="d-block w-100" alt="..."-->
+<!--						height="350px">-->
+<!--				</div>-->
+<!--				<div class="carousel-item">-->
+<!--					<img src="img/ecom3.jpg" class="d-block w-100" alt="..."-->
+<!--						height="350px">-->
+<!--				</div>-->
+<!--				<div class="carousel-item">-->
+<!--					<img src="img/ecom2.jpg" class="d-block w-100" alt="..."-->
+<!--						height="350px">-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<button class="carousel-control-prev" type="button"-->
+<!--				data-bs-target="#carouselExample" data-bs-slide="prev">-->
+<!--				<span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+<!--				<span class="visually-hidden">Previous</span>-->
+<!--			</button>-->
+<!--			<button class="carousel-control-next" type="button"-->
+<!--				data-bs-target="#carouselExample" data-bs-slide="next">-->
+<!--				<span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+<!--				<span class="visually-hidden">Next</span>-->
+<!--			</button>-->
+<!--		</div>-->
 
 		<!-- End Slider  -->
 
@@ -52,59 +52,6 @@
 <!--					</div>-->
 				</div>
 
-				<!-- <div class="col-md-2">
-					<div
-						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
-						<div class="card-body text-center">
-							<img src="img/category_img/beuty.png" width="65%" height="140px">
-							<p>Beauty</p>
-						</div>
-					</div>
-				</div> -->
-
-
-				<!-- <div class="col-md-2">
-					<div
-						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
-						<div class="card-body text-center">
-							<img src="img/category_img/pant.png" width="65%" height="140px">
-							<p>Clothes</p>
-						</div>
-					</div>
-				</div>
- -->
-				<!-- <div class="col-md-2">
-					<div
-						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
-						<div class="card-body text-center">
-							<img src="img/category_img/laptop.jpg" width="65%" height="140px">
-							<p>Laptop</p>
-						</div>
-					</div>
-				</div> -->
-
-
-			<!-- 	<div class="col-md-2">
-					<div
-						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
-						<div class="card-body text-center">
-							<img src="img/category_img/mobile.png" width="65%" height="140px">
-							<p>Mobile</p>
-						</div>
-					</div>
-				</div> -->
-
-				<!-- <div class="col-md-2">
-					<div
-						class="card rounded-circle shadow-sm p-3 mb-5 bg-body-tertiary rounded ">
-						<div class="card-body text-center">
-							<img src="img/category_img/groccery.jpg" width="65%"
-								height="140px">
-							<p>Grocery</p>
-						</div>
-					</div>
-				</div> -->
-
 
 			</div>
 		</div>
@@ -113,52 +60,117 @@
 
 		<!-- Start Latest Product Module -->
 
-		<div class="container-fluid bg-light p-3">
-			<div class="row">
-				<p class="text-center fs-4">Sản phẩm mới nhất</p>
-
-				<div class="col-md-3" th:each="p:${products}">
-					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-						<div class="card-body text-center">
-							<img alt="" th:src="@{'img/product_img/'+${p.image}}" class="" width="65%"
-								height="140px">
-							<p class="text-center"><a th:href="@{'/product/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a></p>
+		<div id="sellers">
+			<div class="seller container">
+				<h2 class="center-titleqq">Top Sales</h2>
+				<div class="best-seller" >
+					<div class="best-p1" th:each="p : ${products}">
+						<img th:src="@{'img/product_img/'+${p.image}}" alt="img" style="width: 100%; height: 250px; object-fit: cover;">
+						<div class="best-p1-txt">
+							<a th:href="@{'/product/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a>
+							<div class="rating">
+								<i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bx-star'></i><i class='bx bx-star'></i>
+							</div>
+							<div class="price" th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+								<div class="colors">
+									<i class='bx bxs-circle red'></i><i class='bx bxs-circle blue'></i><i class='bx bxs-circle white'></i>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 
-
-			<!-- 	<div class="col-md-3">
-					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-						<div class="card-body text-center">
-							<img alt="" src="img/product_img/laptop.jpg" class="" width="65%"
-								height="140px">
-							<p class="text-center">HP Laptop</p>
-						</div>
-					</div>
 				</div>
-
-				<div class="col-md-3">
-					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-						<div class="card-body text-center">
-							<img alt="" src="img/product_img/laptop.jpg" class="" width="65%"
-								height="140px">
-							<p class="text-center">HP Laptop</p>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-3">
-					<div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
-						<div class="card-body text-center">
-							<img alt="" src="img/product_img/laptop.jpg" class="" width="65%"
-								height="140px">
-							<p class="text-center">HP Laptop</p>
-						</div>
-					</div>
-				</div> -->
-
 			</div>
+			<div class="seller container">
+				<h2 class="center-titleqq">New Arrivals</h2>
+				<div class="best-seller">
+					<div class="best-p1" th:each="p : ${products1}">
+						<img th:src="@{'img/product_img/'+${p.image}}" alt="img" style="width: 100%; height: 250px; object-fit: cover;">
+						<div class="best-p1-txt">
+							<a th:href="@{'/product/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a>
+							<div class="rating">
+								<i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bx-star'></i><i class='bx bx-star'></i>
+							</div>
+							<div class="price" th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+								<div class="colors">
+									<i class='bx bxs-circle red'></i><i class='bx bxs-circle blue'></i><i class='bx bxs-circle white'></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="seller container">
+				<h2 class="center-titleqq">Hot Sales</h2>
+				<div class="best-seller" >
+					<div class="best-p1" th:each="p : ${products}">
+						<img th:src="@{'img/product_img/'+${p.image}}" alt="img" style="width: 100%; height: 250px; object-fit: cover;">
+						<div class="best-p1-txt">
+							<a th:href="@{'/product/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a>
+							<div class="rating">
+								<i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bxs-star'></i><i class='bx bx-star'></i><i class='bx bx-star'></i>
+							</div>
+							<div class="price" th:text="${#numbers.formatDecimal(p.price, 0, 'COMMA', 0, 'POINT') + ' đ'}">
+								<div class="colors">
+									<i class='bx bxs-circle red'></i><i class='bx bxs-circle blue'></i><i class='bx bxs-circle white'></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+<!--		</div>-->
+
+		<div class="container-fluid bg-light p-3">
+<!--			<div class="row">-->
+<!--				<p class="text-center fs-4">Sản phẩm mới nhất</p>-->
+
+<!--				<div class="col-md-3 mb-4" th:each="p : ${products}">-->
+<!--					<div class="card product-card">-->
+<!--						<div class="card-body text-center">-->
+<!--							<img th:src="@{'img/product_img/'+${p.image}}" alt=""-->
+<!--								 class="img-fluid mb-3" width="100%" height="180">-->
+<!--							<p class="product-title">-->
+<!--								<a th:href="@{'/product/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a>-->
+<!--							</p>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+
+
+
+				<!-- 	<div class="col-md-3">
+                        <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                            <div class="card-body text-center">
+                                <img alt="" src="img/product_img/laptop.jpg" class="" width="65%"
+                                    height="140px">
+                                <p class="text-center">HP Laptop</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                            <div class="card-body text-center">
+                                <img alt="" src="img/product_img/laptop.jpg" class="" width="65%"
+                                    height="140px">
+                                <p class="text-center">HP Laptop</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card shadow-sm p-3 mb-5 bg-body-tertiary rounded">
+                            <div class="card-body text-center">
+                                <img alt="" src="img/product_img/laptop.jpg" class="" width="65%"
+                                    height="140px">
+                                <p class="text-center">HP Laptop</p>
+                            </div>
+                        </div>
+                    </div> -->
+
+<!--			</div>-->
 		</div>
 
 
@@ -166,3 +178,6 @@
 	</section>
 </body>
 </html>
+
+
+

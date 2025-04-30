@@ -9,7 +9,7 @@
 	<section>
 		<div class="container mt-5 p-5">
 			<div class="row">
-				<p class="text-center fs-3">My Orders</p>
+				<p class="text-center fs-3">Đơn đặt hàng của bạn</p>
 				<th:block th:if="${session.succMsg}">
 					<p class="text-success fw-bold text-center">[[${session.succMsg}]]</p>
 					<th:block th:text="${@commnServiceImpl.removeSessionMessage()}"></th:block>
@@ -23,30 +23,35 @@
 
 					<table class="table table-bordered card-sh">
 						<thead >
-							<tr >
-								<th scope="col">Order Id</th>
-								<th scope="col">Date</th>
-								<th scope="col">Product Details</th>
-								<th scope="col">Price</th>
-								<th scope="col">Status</th>
-								<th scope="col">Action</th>
-							</tr>
+						<tr>
+							<th scope="col">Mã đơn hàng</th>
+							<th scope="col">Ngày đặt</th>
+							<th scope="col">Chi tiết sản phẩm</th>
+							<th scope="col">Giá</th>
+							<th scope="col">Trạng thái</th>
+							<th scope="col">Thao tác</th>
+						</tr>
+
 						</thead>
 						<tbody>
 							<tr th:each="o:${orders}">
 								<th scope="row">[[${o.orderId}]]</th>
 								<td>[[${o.orderDate}]]</td>
 								<td>[[${o.product.title}]]</td>
-								<td>Quantity : [[${o.quantity}]] <br>Price :
-									[[${o.price}]]đ <br>Total Price :[[${o.quantity *
-									o.price}]]đ
+								<td>
+									Số lượng: [[${o.quantity}]] <br>
+									Đơn giá:
+									<small th:text="${#numbers.formatDecimal(o.price, 0, 'COMMA', 0, 'POINT') + ' đ'}"></small> <br>
+									Tổng tiền:
+									<small th:text="${#numbers.formatDecimal(o.quantity * o.price, 0, 'COMMA', 0, 'POINT') + ' đ'}"></small>
 								</td>
+
 								<td>[[${o.status}]]</td>
 								<td><th:block th:if="${o.status!='Cancelled'}">
 										<a th:href="@{'/user/update-status?id='+${o.id}+'&st=6' }"
-											class="btn btn-sm btn-danger">Cancel</a>
+											class="btn btn-sm btn-danger">Hủy</a>
 									</th:block> <th:block th:unless="${o.status!='Cancelled'}">
-										<a href="#" class="btn btn-sm btn-danger disabled" >Cancel</a>
+										<a href="#" class="btn btn-sm btn-danger disabled" >Hủy</a>
 									</th:block></td>
 							</tr>
 						</tbody>
