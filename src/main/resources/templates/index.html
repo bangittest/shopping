@@ -65,7 +65,8 @@
 				<h2 class="center-titleqq">Top Sales</h2>
 				<div class="best-seller" >
 					<div class="best-p1" th:each="p : ${products}">
-						<img th:src="@{'img/product_img/'+${p.image}}" alt="img" style="width: 100%; height: 250px; object-fit: cover;">
+						<img alt="" th:src="@{|/img/product_img/${p.image}|}" style="width: 100%; height: 250px; object-fit: cover;">
+
 						<div class="best-p1-txt">
 							<a th:href="@{'/product/'+${p.id}}" class="text-decoration-none">[[${p.title}]]</a>
 							<div class="rating">

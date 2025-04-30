@@ -8,6 +8,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +24,8 @@ import com.ecom.service.ProductService;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+	@Value("${path.img.product}")
+	private String pathImgProduct;
 	@Autowired
 	private ProductRepository productRepository;
 
@@ -85,12 +88,14 @@ public class ProductServiceImpl implements ProductService {
 		if (!ObjectUtils.isEmpty(updateProduct)) {
 
 			if (!image.isEmpty()) {
-
 				try {
-					File saveFile = new ClassPathResource("static/img").getFile();
 
-					Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + "product_img" + File.separator
-							+ image.getOriginalFilename());
+					File uploadDir = new File(pathImgProduct);
+					if (!uploadDir.exists()) {
+						uploadDir.mkdirs();
+					}
+
+					Path path = Paths.get(uploadDir.getAbsolutePath() + File.separator + image.getOriginalFilename());
 					Files.copy(image.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
 				} catch (Exception e) {

@@ -77,7 +77,8 @@
 								</div>
 
 								<div class="mt-1">
-									<img th:src="@{'/img/product_img/'+${product.image}}" width="100px" height="100px">
+
+									<img th:src="@{|/img/product_img/${product.image}|}" width="100px" height="100px">
 								</div>
 							</div>
 
@@ -128,6 +129,7 @@
 					if (data.success) {
 						alert(data.message);  // Hiển thị thông báo thành công
 						setTimeout(() => window.location.href = "/admin/products", 2000); // Điều hướng sau 2 giây
+						window.location.href = "/admin/products";
 					} else {
 						alert(data.message);  // Hiển thị thông báo lỗi
 					}

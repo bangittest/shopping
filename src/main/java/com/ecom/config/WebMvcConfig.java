@@ -10,12 +10,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${path.img.profile}")
     private String pathImgProfile;
+    @Value("${path.img.product}")
+    private String pathImgProduct;
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/profile_img/**")
                 .addResourceLocations("file:"+pathImgProfile);
 
         registry.addResourceHandler("/product_img/**")
-                .addResourceLocations("file:///D:/projectdoan/uploads/product_img/");
+                .addResourceLocations("file:"+pathImgProduct);
     }
 }
