@@ -104,16 +104,16 @@ body {
 	z-index: 100;
 }
 
-.navbar-container {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	height: 64px;
-}
+/*.navbar-container {*/
+/*	display: flex;*/
+/*	justify-content: space-between;*/
+/*	align-items: center;*/
+/*	height: 64px;*/
+/*}*/
 
-.navbar img {
-	margin-left: 3rem;
-}
+/*.navbar img {*/
+/*	margin-left: 3rem;*/
+/*}*/
 
 .menu-items {
 	order: 2;
@@ -127,27 +127,27 @@ body {
 	font-size: 1.2rem;
 }
 
-.navbar-container ul a {
-	text-decoration: none;
-	color: var(--black);
-	font-size: 18px;
-	position: relative;
-}
+/*.navbar-container ul a {*/
+/*	text-decoration: none;*/
+/*	color: var(--black);*/
+/*	font-size: 18px;*/
+/*	position: relative;*/
+/*}*/
 
-.navbar-container ul a:after {
-	content: "";
-	position: absolute;
-	background: var(--primary-color);
-	height: 3px;
-	width: 0;
-	left: 0;
-	bottom: -10px;
-	transition: 0.3s;
-}
+/*.navbar-container ul a:after {*/
+/*	content: "";*/
+/*	position: absolute;*/
+/*	background: var(--primary-color);*/
+/*	height: 3px;*/
+/*	width: 0;*/
+/*	left: 0;*/
+/*	bottom: -10px;*/
+/*	transition: 0.3s;*/
+/*}*/
 
-.navbar-container ul a:hover:after {
-	width: 100%;
-}
+/*.navbar-container ul a:hover:after {*/
+/*	width: 100%;*/
+/*}*/
 
 @media (max-width: 768px) {
 	.navbar {

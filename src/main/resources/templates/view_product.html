@@ -1,226 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  th:replace="~{base::layout(~{::section})}">
 <head>
 	<meta charset="UTF-8">
 	<title>Sumire Store</title>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-	<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-			rel="stylesheet"
-			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-			crossorigin="anonymous">
-
-	<link rel="stylesheet"
-		  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-		  integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-		  crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
-	<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-<style>
-	.menu-icon {
-		margin-right: 6px; /* hoặc điều chỉnh px tuỳ ý */
-	}
-	footer {
-		background-color: #212529; /* nền tối */
-		padding: 40px 0;
-		font-size: 14px;
-		color: #fff;
-	}
 
-	.footer-title {
-		color: #fff;
-	}
-
-	.footer-block .content span,
-	.footer-block .content a {
-		color: #ddd;
-	}
-
-	.footer-block .content a:hover {
-		color: #0d6efd; /* đổi màu khi hover */
-		text-decoration: none; /* bỏ gạch chân */
-	}
-
-	.footer-block ul.list-menu li a {
-		color: #ccc; /* Màu chữ cho liên kết */
-		font-family: 'Arial', sans-serif; /* Đổi font chữ */
-		text-decoration: none; /* Bỏ gạch chân */
-	}
-
-	.footer-block ul.list-menu li a:hover {
-		color: #0d6efd;
-		text-decoration: none; /* Bỏ gạch chân khi hover */
-	}
-
-	.fot_copyright {
-		color: #aaa;
-	}
-
-	.wsp a {
-		color: #ddd;
-		text-decoration: none;
-	}
-
-	.wsp a:hover {
-		text-decoration: underline;
-	}
-
-	/* Đảm bảo navbar có màu nền trắng và chữ sáng */
-	.navbar-light .navbar-nav .nav-link {
-		color: #555 !important;  /* Chữ màu xám nhẹ, sáng hơn */
-	}
-
-	.navbar-light .navbar-nav .nav-link.active {
-		color: #555 !important;  /* Chữ màu xám khi có active */
-	}
-
-	.navbar-light .navbar-nav .dropdown-item {
-		color: #555 !important;  /* Màu chữ cho các mục trong dropdown */
-	}
-
-	.navbar-light .navbar-nav .dropdown-item:hover {
-		background-color: #f8f9fa !important;  /* Màu nền khi hover */
-	}
-
-	/* Đảm bảo biểu tượng màu xám sáng */
-	.navbar-light .navbar-nav .nav-link i {
-		color: #555 !important; /* Biểu tượng màu xám sáng */
-	}
-
-	/* Thay đổi màu chữ trong menu khi hover */
-	.navbar-light .navbar-nav .nav-link:hover,
-	.navbar-light .navbar-nav .dropdown-item:hover {
-		color: #333 !important; /* Màu chữ khi hover */
-	}
-
-	/* Thay đổi màu sắc cho biểu tượng cart nếu muốn */
-	.navbar-light .navbar-nav .nav-link i.fa-cart-shopping {
-		font-size: 18px; /* Chỉnh kích thước của biểu tượng */
-		color: #555;  /* Màu xám sáng */
-	}
-
-	/* Đảm bảo giỏ hàng và số lượng hiển thị đẹp */
-	.mini-cart .header-icon {
-		display: flex;
-		width:20px ;
-		height:20px ;
-		align-items: center;
-		position: relative;
-	}
-
-	/* Căn chỉnh giỏ hàng và số lượng */
-	.mini-cart {
-		position: relative;
-		top: -4px; /* Để có thể căn chỉnh số lượng một cách chính xác */
-		display: inline-flex;  /* Giữ cho biểu tượng và số lượng thẳng hàng */
-		align-items: center;  /* Căn giữa theo chiều dọc */
-	}
-
-	/* Căn chỉnh biểu tượng giỏ hàng */
-	.header-icon i {
-		font-size: 16px;   /* Điều chỉnh kích thước biểu tượng giỏ hàng */
-		color: #555;       /* Màu sắc biểu tượng giỏ hàng */
-	}
-
-	/* Số lượng trong giỏ hàng (count) */
-	.count_item {
-		font-size: 8px;     /* Điều chỉnh kích thước của số lượng */
-		color: #fff;         /* Màu chữ của số lượng */
-		background-color: #f44336; /* Màu nền của số lượng */
-		position: absolute;
-		top: -10px;           /* Đẩy lên trên một chút */
-		right: -5px;         /* Đẩy sang bên phải một chút */
-		width: 14px;         /* Kích thước của vòng tròn */
-		height: 14px;        /* Kích thước của vòng tròn */
-		border-radius: 50%;  /* Tạo hình tròn */
-		display: flex;
-		justify-content: center;  /* Căn giữa chữ trong vòng tròn */
-		align-items: center;      /* Căn giữa chữ trong vòng tròn */
-		font-weight: bold;        /* Định dạng chữ cho số lượng */
-	}
-
-	/* Tùy chỉnh thêm nếu muốn thêm hiệu ứng cho khi giỏ hàng có sản phẩm */
-	.count_item_pr {
-		font-size: 14px;
-	}
-
-
-</style>
-<nav class="navbar navbar-expand-lg bg-white fixed-top navbar-light">
-	<div class="container-fluid">
-		<a class="nav-link active" href="/">
-			<img alt="" src="img/logo.png" width="134px" height="45px">
-		</a>
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-				<th:block th:if="${user==null}">
-					<li class="nav-item"><a class="nav-link active" aria-current="page" href="/"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
-				</th:block>
-
-				<th:block th:unless="${user==null}">
-					<li class="nav-item" th:if="${user.role=='ROLE_ADMIN'}"><a class="nav-link active" aria-current="page" href="/admin/"><i class="fa-solid fa-house"></i> Home</a></li>
-
-					<li class="nav-item" th:if="${user.role=='ROLE_USER'}"><a class="nav-link active" aria-current="page" href="/"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
-				</th:block>
-
-				<li class="nav-item d-flex align-items-center ms-2">
-					<img src="img/menu_icon_1.png" width="24" height="24" class="menu-icon" alt="Tất cả sản phẩm">
-					<a class="nav-link active" aria-current="page" href="/products">Tất cả sản phẩm</a>
-				</li>
-
-				<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Danh mục</a>
-					<ul class="dropdown-menu">
-						<li th:each="c:${categorys}"><a class="dropdown-item" th:href="@{'/products?category='+${c.name}}">[[${c.name}]]</a></li>
-					</ul>
-				</li>
-			</ul>
-
-			<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-				<th:block th:if="${user==null}">
-					<li class="nav-item"><a class="nav-link active" aria-current="page" href="/signin"><i class="fa-solid fa-right-to-bracket"></i> LOGIN</a></li>
-					<li class="nav-item"><a class="nav-link active" aria-current="page" href="/register">REGISTER</a></li>
-				</th:block>
-
-				<th:block th:if="${user!=null}">
-					<th:block th:if="${user.role=='ROLE_USER'}">
-						<!-- Chuyển từ "Cart [1]" sang biểu tượng cart -->
-						<li class="nav-item">
-							<a class="nav-link active" href="/user/cart">
-								<div class="mini-cart text-xs-center">
-									<a class="header-icon cart-count ega-color--inherit" href="/user/cart" title="Giỏ hàng">
-										<i class="fas fa-shopping-cart"></i>  <!-- Biểu tượng giỏ hàng FontAwesome -->
-										<span class="count_item count_item_pr">[[${countCart}]]</span> <!-- Số lượng sản phẩm trong giỏ -->
-									</a>
-								</div>
-							</a>
-						</li>
-
-
-					</th:block>
-					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i> [[${user.name}]]</a>
-						<ul class="dropdown-menu">
-							<li th:if="${user.role=='ROLE_USER'}"><a class="dropdown-item" href="/user/profile">Profile</a></li>
-
-							<li th:if="${user.role=='ROLE_ADMIN'}"><a class="dropdown-item" href="/admin/profile">Profile</a></li>
-
-							<li th:if="${user.role=='ROLE_USER'}"><a class="dropdown-item" href="/user/user-orders">My Orders</a></li>
-							<li><a class="dropdown-item" href="/logout">Logout</a></li>
-							<li>
-								<hr class="dropdown-divider">
-							</li>
-						</ul>
-					</li>
-				</th:block>
-			</ul>
-		</div>
-	</div>
-</nav>
 <section>
 	<div class="container mt-5 pt-5 mb-5">
 		<div class="card shadow-lg p-4 rounded-4 border-0">
@@ -230,7 +16,7 @@
 
 				<!-- Hình ảnh sản phẩm -->
 				<div class="col-md-6 text-center">
-					<img th:src="@{'/img/product_img/' + ${product.image}}"
+					<img th:src="@{|/img/product_img/${product.image}|}"
 						 class="img-fluid rounded shadow-sm border"
 						 style="max-height: 350px; object-fit: contain;" alt="product">
 				</div>
@@ -302,18 +88,6 @@
 
 
 
-
-<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script
-		src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
-<script type="text/javascript" src="js/script.js"></script>
-<script type="text/javascript" src="../js/script.js"></script>
-<!-- End  -->
-<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-		crossorigin="anonymous"></script>
 </body>
 </html>
 

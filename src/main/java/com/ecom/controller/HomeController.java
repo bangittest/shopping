@@ -80,8 +80,8 @@ public class HomeController {
 	@GetMapping("/")
 	public String index(Model m) {
 
-		List<Category> allActiveCategory = categoryService.getAllActiveCategory().stream()
-				.sorted((c1, c2) -> c2.getId().compareTo(c1.getId())).limit(6).toList();
+//		List<Category> allActiveCategory = categoryService.getAllActiveCategory().stream()
+//				.sorted((c1, c2) -> c2.getId().compareTo(c1.getId())).limit(6).toList();
 
 		List<Product> allActiveProducts = productService.getAllActiveProducts("");
 		Collections.shuffle(allActiveProducts);
@@ -94,7 +94,7 @@ public class HomeController {
 				.toList();
 
 		// Lấy 4 sản phẩm ngẫu nhiên
-		m.addAttribute("category", allActiveCategory);
+//		m.addAttribute("category", allActiveCategory);
 		m.addAttribute("products", randomProducts);
 		m.addAttribute("products1", randomProducts1);
 		return "index";
@@ -114,6 +114,7 @@ public class HomeController {
 	public String products(Model m, @RequestParam(value = "category", defaultValue = "") String category,
 			@RequestParam(name = "pageNo", defaultValue = "0") Integer pageNo,
 			@RequestParam(name = "pageSize", defaultValue = "12") Integer pageSize,
+			@RequestParam(value = "sort", required = false) String sort,
 			@RequestParam(defaultValue = "") String ch) {
 
 		List<Category> categories = categoryService.getAllActiveCategory();
@@ -129,7 +130,15 @@ public class HomeController {
 			page = productService.searchActiveProductPagination(pageNo, pageSize, category, ch);
 		}
 
-		List<Product> products = page.getContent();
+
+		List<Product> products = new ArrayList<>(page.getContent());
+
+		// Xử lý sắp xếp theo giá
+		if ("asc".equalsIgnoreCase(sort)) {
+			products.sort(Comparator.comparing(Product::getDiscountPrice));
+		} else if ("desc".equalsIgnoreCase(sort)) {
+			products.sort(Comparator.comparing(Product::getDiscountPrice).reversed());
+		}
 		m.addAttribute("products", products);
 		m.addAttribute("productsSize", products.size());
 
@@ -139,6 +148,7 @@ public class HomeController {
 		m.addAttribute("totalPages", page.getTotalPages());
 		m.addAttribute("isFirst", page.isFirst());
 		m.addAttribute("isLast", page.isLast());
+		m.addAttribute("sort", sort);
 
 		return "product";
 	}

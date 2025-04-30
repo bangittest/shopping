@@ -6,6 +6,17 @@
     <title>Sumire Store</title>
 </head>
 <body>
+<style>
+	/* Dùng transition từ Bootstrap cho collapse */
+	.custom-collapse {
+		overflow: hidden;
+	}
+</style>
+
+
+
+
+
 	<section>
 
 		<div class="container-fluid bg-gray1 p-4 ">
@@ -14,8 +25,8 @@
 					<form action="/products" method="get">
 						<div class="input-group">
 							<input type="text" class="form-control" name="ch">
-							<button class="btn btn-light text-dark ms-3 col-md-2">
-								<i class="fa-solid fa-magnifying-glass"></i> Search
+							<button class="quantity-btn1 btn-light text-dark ">
+								<i class="fa-solid fa-magnifying-glass"></i>
 							</button>
 						</div>
 					</form>
@@ -32,23 +43,51 @@
 
 					<div class="card shadow-sm p-0 mb-5 bg-body-tertiary rounded">
 						<div class="card-body">
-							<div class="list-group">
-								<p class="fs-5">Danh mục</p>
-								<a href="/products"
-									th:classappend="${paramValue==''} ? 'active':''"
-									class="list-group-item list-group-item-action"
-									aria-current="true"> All </a> <a th:each="c:${categories}"
-									th:href="@{'/products?category='+${c.name}}"
-									th:classappend="${paramValue == c.name} ? 'active':''"
-									class="list-group-item list-group-item-action">[[${c.name}]]</a>
+							<p class="">
+								<span class="" data-bs-toggle="collapse" href="#collapseCategory" role="button"
+								   aria-expanded="false" aria-controls="collapseCategory" id="categoryToggle">
+									<label  class="form-label fw-semibold">Danh mục: <i class="fas fa-chevron-down"></i></label>
+
+								</span>
+							</p>
+
+							<!-- Danh sách danh mục xổ xuống -->
+							<div class="custom-collapse" id="collapseCategory">
+								<div class="list-group">
+									<a th:href="@{/products}"
+									   th:classappend="${paramValue == null} ? 'active' : ''"
+									   class="list-group-item list-group-item-action">
+										Tất cả
+									</a>
+
+									<a th:each="c : ${categories}"
+									   th:href="@{'/products?category=' + ${c.name}}"
+									   th:classappend="${paramValue == c.name} ? 'active' : ''"
+									   class="list-group-item list-group-item-action">
+										[[${c.name}]]
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="card-body">
+							<!-- Lọc theo giá -->
+							<div class="mb-3">
+								<label for="sortPrice" class="form-label fw-semibold">Sắp xếp theo giá:</label>
+								<select class="form-select" id="sortPrice" onchange="onSortChange(this)">
+									<option th:value="@{/products(category=${paramValue}, sort='asc')}"
+											th:selected="${sort == 'asc'}">Giá tăng dần</option>
+									<option th:value="@{/products(category=${paramValue}, sort='desc')}"
+											th:selected="${sort == 'desc'}">Giá giảm dần</option>
+								</select>
 							</div>
 						</div>
 					</div>
+
 				</div>
 				<div class="col-md-10">
 					<div class="card">
 						<div class="card-body">
-							<p class="fs-3 text-center">Tất cả sản phẩm</p>
 							<div class="row seller">
 
 								<th:block th:if="${productsSize >0}">
@@ -117,3 +156,67 @@
 	</section>
 </body>
 </html>
+
+
+<script>
+
+		document.addEventListener("DOMContentLoaded", function () {
+		const categoryLinks = document.querySelectorAll('#categoryList a');
+		const productList = document.getElementById('productList');
+
+		// Gán sự kiện click cho tất cả danh mục
+		categoryLinks.forEach(link => {
+		link.addEventListener('click', function (e) {
+		e.preventDefault();
+		const category = this.getAttribute('data-category');
+
+		// Highlight danh mục đang chọn
+		categoryLinks.forEach(l => l.classList.remove('active'));
+		this.classList.add('active');
+
+		// Gọi AJAX để lấy danh sách sản phẩm
+		fetch(`/products?category=${encodeURIComponent(category)}`, {
+		headers: {
+		'X-Requested-With': 'XMLHttpRequest' // để controller biết là request từ AJAX
+	}
+	})
+		.then(res => {
+		if (!res.ok) throw new Error("Network error");
+		return res.text();
+	})
+		.then(html => {
+		// Cập nhật phần danh sách sản phẩm
+		productList.innerHTML = html;
+		// Cuộn lên đầu danh sách (nếu cần)
+		productList.scrollIntoView({ behavior: 'smooth' });
+	})
+		.catch(err => {
+		productList.innerHTML = "<p class='text-danger'>Không thể tải sản phẩm.</p>";
+		console.error(err);
+	});
+
+		// Cập nhật URL mà không reload
+		const newUrl = new URL(window.location.href);
+		if (category) {
+		newUrl.searchParams.set('category', category);
+	} else {
+		newUrl.searchParams.delete('category');
+	}
+		window.history.pushState({}, '', newUrl);
+	});
+	});
+	});
+</script>
+<script>
+
+	// Xử lý thay đổi filter theo giá
+	function onSortChange(select) {
+		const url = select.value;
+		window.location.href = url;  // Chuyển hướng sang URL mới có tham số sort
+	}
+</script>
+
+
+
+
+
