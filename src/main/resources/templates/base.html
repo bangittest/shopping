@@ -165,7 +165,7 @@
                 </th:block>
 
                 <th:block th:unless="${user==null}">
-                    <li class="nav-item" th:if="${user.role=='ROLE_ADMIN'}"><a class="nav-link active" aria-current="page" href="/admin/"><i class="fa-solid fa-house"></i> </a></li>
+<!--                    <li class="nav-item" th:if="${user.role=='ROLE_ADMIN'}"><a class="nav-link active" aria-current="page" href="/admin/"><i class="fa-solid fa-house"></i> </a></li>-->
 
                     <li class="nav-item" th:if="${user.role=='ROLE_USER'}"><a class="nav-link active" aria-current="page" href="/"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
                 </th:block>
@@ -178,7 +178,7 @@
                 </li>
 
 
-                <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Danh mục</a>
+                <li class="nav-item dropdown" th:if="${user == null or user.role != 'ROLE_ADMIN'}"><a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Danh mục</a>
                     <ul class="dropdown-menu">
                         <li th:each="c:${categorys}"><a class="dropdown-item" th:href="@{'/products?category='+${c.name}}">[[${c.name}]]</a></li>
                     </ul>
